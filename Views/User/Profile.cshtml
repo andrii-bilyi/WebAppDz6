@@ -1,0 +1,70 @@
+﻿@model WebAppDz4.Models.User.UserProfileViewModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<h1 class="display-4">Кабінет користувача</h1>
+@if(Model.User is null)
+{
+    <div class="alert alert-danger" role="alert">
+        Користувач не знайдений
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-lg-12 mb-4 mb-sm-5">
+            <div class="card card-style1 border-0">
+                <div class="card-body p-1-9 p-sm-2-3 p-md-6 p-lg-7">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <img src="/avatars/@(Model.User.Avatar)" class="parameters-avatar" alt="Avatar">
+                        </div>
+                        <div class="col-lg-6 px-xl-10">
+                            <div class="bg-secondary d-lg-inline-block py-1-9 px-1-9 px-sm-6 mb-1-9 rounded">
+                                <h3 class="h2 text-white mb-0">@(Model.User.Name)</h3>
+                                <span class="text-primary">@(Model.User.Email)</span>
+                            </div>
+                            <ul class="list-unstyled mb-1-9">
+                                <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600">Login:</span> @(Model.User.Login)</li>
+                                <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600">Name:</span>
+                                    @if (Model.IsPersonal){
+                                        <input name="profile-name" value="@(Model.User.Name)">
+                                    }
+                                    else
+                                    {
+                                        @(Model.User.Name)
+                                    }                                    
+                                </li>
+                                <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600">Email:</span>
+                                    @if (Model.IsPersonal)
+                                    {
+                                        <input name="profile-email" value="@(Model.User.Email)">
+                                    }
+                                    else
+                                    {
+                                        @(Model.User.Email)
+                                    }                                   
+                                </li>
+                                <li class="mb-2 mb-xl-3 display-28"><span class="display-26 text-secondary me-2 font-weight-600">Registered:</span> @(Model.User.RegisterDt)</li>
+                                
+                            </ul>
+                            @if (Model.IsPersonal)
+                            {
+                                <div class="d-grid gap-2 d-md-block">
+                                    <button id="profile-delete-button" class="btn btn-outline-danger me-md-2" onclick="return confirm('Ви впевнені, що хочете видалити свій аккаунт?')">Видалити</button>
+                                    <button id="profile-softRemoval-button" class="btn btn-outline-warning" onclick="return confirm('Ви впевнені, дію вашого аккаунту буде призупинено?')">М'яке видалення</button>
+                                    <button id="profile-save-button" class="btn btn-outline-secondary ms-md-2">Зберігти</button>
+                                </div>                                
+                            }                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* <p>
+        Name = @Model.User.Name
+        id = @ViewData["id"]
+    </p> *@
+}

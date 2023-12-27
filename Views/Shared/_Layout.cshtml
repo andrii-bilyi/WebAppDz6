@@ -1,0 +1,107 @@
+﻿@using System.Security.Claims;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - WebAppDz4</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/WebAppDz4.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">WebAppDz4</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                       @*  <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="SingUp">SingUp</a>
+                        </li> *@
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Db">Db</a>
+                        </li>
+                    </ul>
+                    @if (Context.User.Identity?.IsAuthenticated ?? false)
+                    {
+                        String avatar = Context.User.Claims
+                        .First(claim => claim.Type == ClaimTypes.UserData)
+                        .Value;
+                        if (String.IsNullOrEmpty(avatar)) avatar = "MicrosoftTeams-image.png";
+                        <a asp-controller="User" asp-action="Profile">
+                            <img src="~/Avatars/@(avatar)" class="nav-avatar" />
+                        </a>
+                        <button type="button"
+                                id="auth-signout-button"
+                                class="btn btn-outline-secondary">
+                            <i class="bi bi-box-arrow-right"></i>
+                        </button>
+                    }
+                    else
+                    {
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-outline-secondary"
+                                data-bs-toggle="modal"
+                                data-bs-target="#authModal">
+                            <i class="bi bi-box-arrow-in-left"></i>
+                        </button>
+                    }
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - WebAppDz4 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="authModalLabel">Авторизація</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="auth-login" class="form-label">Логін:</label>
+                        <input type="text" class="form-control" id="auth-login" name="login" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="auth-password" class="form-label">Пароль:</label>
+                        <input type="password" class="form-control" id="auth-password" name="password" required>
+                    </div>
+                </div>                
+                <div class="modal-footer">
+                    <div id="auth-message" class="alert alert-danger visually-hidden" role="alert"></div>
+                    <a asp-controller="Home" asp-action="SingUp"
+                       class="btn btn-info">Реєстрація</a>
+                    <button type="button" class="btn btn-primary" id="auth-button">Увійти</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

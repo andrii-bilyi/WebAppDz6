@@ -1,0 +1,51 @@
+﻿@using WebAppDz4.Data.Entities;
+@model List<User>
+@{
+    ViewData["Title"] = "Db";
+}
+
+<h1 class="display-4">База даних</h1>
+
+<table class="table table-success table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Логін</th>
+            <th>ПІБ</th>
+            <th>Е-пошта</th>
+            <th>Аватарка</th> 
+            <th>Дата реєстрації</th>
+            <th>Дата видалення</th>            
+            <th>Видалення</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>@user.Login</td>
+                <td>@user.Name</td>
+                <td>@user.Email</td>
+                @* <td>@user.Avatar</td> *@
+                <td>
+                    @if (!string.IsNullOrEmpty(user.Avatar))
+                    {
+                        <img src="/avatars/@user.Avatar" alt="User Avatar" class="img-thumbnail" style="max-width: 50px; max-height: 50px;" />
+                    }
+                    else
+                    {
+                        <span>No Avatar</span>
+                    }
+                </td>
+                <td>@user.RegisterDt</td>
+                <td>@user.DeleteDt</td>               
+                <td>
+                    <form method="post" action="@Url.Action("Delete", "Home", new { id = user.Id })">
+                        <button type="submit" class="btn btn-outline-danger" onclick="return confirm('Ви впевнені, що хочете видалити цього користувача?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
